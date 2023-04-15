@@ -23,9 +23,7 @@ public class DeploymentService : IDeploymentService
         var server = await _sqlServerRepository.GetByName(serverName);
 
 
-        var deploymentConfiguration = new DeploymentConfiguration(
-        {
-        };
+        var deploymentConfiguration = new DeploymentConfiguration();
 
         var dacpac = _dacpacRepository.RetrieveStream(dacpacName);
 
@@ -82,7 +80,6 @@ public class DeploymentService : IDeploymentService
                 diff.Target = targetObject.GetScript();
             }
 
-     
 
             differences.Add(diff);
         }
@@ -90,7 +87,6 @@ public class DeploymentService : IDeploymentService
 
         return differences;
     }
-
 
 
     private DacDeployOptions ToDacDeployOptions(DeploymentConfiguration configuration)
