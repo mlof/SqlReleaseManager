@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using SqlReleaseManager.Web.Data;
+using SqlReleaseManager.Core.Persistence;
+using SqlReleaseManager.Identity.Persistence;
 
 namespace SqlReleaseManager.Web
 {
@@ -11,15 +12,25 @@ namespace SqlReleaseManager.Web
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
-                                   throw new InvalidOperationException(
-                                       "Connection string 'DefaultConnection' not found.");
+            var applicationDbConnectionString = builder.Configuration.GetConnectionString("ApplicationDb") ??
+                                                throw new InvalidOperationException(
+                                                    "Connection string 'DefaultConnection' not found.");
+            var identityDbConnectionString = builder.Configuration.GetConnectionString("IdentityDb") ??
+                                             throw new InvalidOperationException(
+                                                 "Connection string 'IdentityDb' not found.");
+
+            builder.Services.AddDbContext<IdentityContext>(options =>
+                ConfigureDbContext<IdentityContext>(options, identityDbConnectionString)
+                    
+                );
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
+                ConfigureDbContext<ApplicationDbContext>(options, applicationDbConnectionString)
+            );
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<IdentityContext>();
+
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
@@ -49,6 +60,11 @@ namespace SqlReleaseManager.Web
             app.MapRazorPages();
 
             app.Run();
+        }
+
+        private static DbContextOptionsBuilder ConfigureDbContext<T>(DbContextOptionsBuilder options, string connectionString)
+        {
+            return options.UseSqlServer(connectionString, optionsBuilder => optionsBuilder.MigrationsAssembly(typeof(T).Assembly.GetName().Name));
         }
     }
 }

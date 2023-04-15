@@ -5,7 +5,7 @@ using System;
 using System.Reflection;
 using System.Threading.Tasks;
 using FluentAssertions;
-using SqlReleaseManager.Core.Models;
+using SqlReleaseManager.Core.Commands;
 
 namespace SqlReleaseManager.Core.Tests.Repositories
 {
@@ -98,7 +98,6 @@ namespace SqlReleaseManager.Core.Tests.Repositories
         }
 
         [Test]
-
         public async Task List_NoDacpacs()
         {
             // Arrange
@@ -110,7 +109,6 @@ namespace SqlReleaseManager.Core.Tests.Repositories
         }
 
         [Test]
-
         public async Task Delete()
         {
             // Arrange
@@ -118,7 +116,7 @@ namespace SqlReleaseManager.Core.Tests.Repositories
             var file = File.OpenRead(ValidDacpacPath);
             CreateOrUpdateDacpac dacpac = new CreateOrUpdateDacpac("Test", file);
             await dacpacRepository.Create(
-                               dacpac);
+                dacpac);
             // Act
             await dacpacRepository.Delete("Test");
             // Assert
@@ -127,7 +125,6 @@ namespace SqlReleaseManager.Core.Tests.Repositories
         }
 
         [Test]
-
         public async Task Delete_DacpacDoesNotExist()
         {
             // Arrange
@@ -139,11 +136,19 @@ namespace SqlReleaseManager.Core.Tests.Repositories
         }
 
         [Test]
-
-        public async Task Get()
+        public async Task Retrieve()
         {
+            // Arrange
+            var dacpacRepository = this.CreateDacpacRepository();
+            var file = File.OpenRead(ValidDacpacPath);
+            CreateOrUpdateDacpac dacpac = new CreateOrUpdateDacpac("Test", file);
+            await dacpacRepository.Create(
+                dacpac);
+            // Act
+            var result = dacpacRepository.Retrieve("Test");
+            // Assert
+            result.Should().NotBeNull();
+            result.Name.Should().Be("Test");
         }
-
-      
     }
 }

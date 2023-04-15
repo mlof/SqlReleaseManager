@@ -1,4 +1,5 @@
 ﻿using Microsoft.SqlServer.Dac;
+using SqlReleaseManager.Core.Commands;
 using SqlReleaseManager.Core.Models;
 
 namespace SqlReleaseManager.Core.Abstractions;

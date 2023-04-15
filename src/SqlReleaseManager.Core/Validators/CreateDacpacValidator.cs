@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FluentValidation;
-using SqlReleaseManager.Core.Models;
+using SqlReleaseManager.Core.Commands;
 
 namespace SqlReleaseManager.Core.Validators
 {

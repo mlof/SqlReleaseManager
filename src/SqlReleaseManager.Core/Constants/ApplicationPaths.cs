@@ -1,4 +1,4 @@
-﻿namespace SqlReleaseManager.Core;
+﻿namespace SqlReleaseManager.Core.Constants;
 
 public static class ApplicationPaths
 {
