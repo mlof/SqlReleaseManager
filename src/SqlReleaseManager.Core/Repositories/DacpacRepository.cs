@@ -99,6 +99,26 @@ public class DacpacRepository : IDacpacRepository
         return package;
     }
 
+    public Stream RetrieveStream(string name)
+    {
+        var directoryPath = Path.Join(_storageDirectory.FullName, name);
+        if (!Directory.Exists(directoryPath))
+        {
+            throw new InvalidOperationException($"Dacpac with name {name} does not exist.");
+        }
+
+        var filePath = Path.Join(directoryPath, name, $"{name}.dacpac");
+
+        if (!File.Exists(filePath))
+        {
+            throw new InvalidOperationException($"Dacpac with name {name} does not exist.");
+        }
+
+        var fileStream = File.OpenRead(filePath);
+
+        return fileStream;
+    }
+
     public Task Update(string name, CreateOrUpdateDacpac dacpac)
     {
         // check if dacpac exists

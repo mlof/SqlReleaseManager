@@ -10,5 +10,7 @@ public interface IDacpacRepository : IDisposable
     Task<IEnumerable<DacpacDto>> List();
     Task Delete(string name);
     DacPackage Retrieve(string name);
+    Stream RetrieveStream(string name);
     Task Update(string name, CreateOrUpdateDacpac dacpac);
+    void Dispose();
 }
