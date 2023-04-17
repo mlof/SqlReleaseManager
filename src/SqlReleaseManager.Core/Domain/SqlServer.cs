@@ -8,6 +8,7 @@ using SqlReleaseManager.Core.Abstractions;
 using SqlReleaseManager.Core.Models;
 using SqlReleaseManager.Core.SchemaComparison;
 using ForeignKeyConstraint = System.Data.ForeignKeyConstraint;
+using Schema = SqlReleaseManager.Core.SchemaComparison.Schema;
 
 namespace SqlReleaseManager.Core.Domain;
 
