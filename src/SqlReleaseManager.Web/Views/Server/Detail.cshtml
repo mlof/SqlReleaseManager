@@ -1,0 +1,94 @@
+﻿@model ServerViewModel
+<div class="card">
+    <div class="card-body">
+        <h2>Summary</h2>
+        <dl>
+            <dt>Server Name</dt>
+            <dd>@Model.ServerName</dd>
+            <dt>Edition</dt>
+            <dd>@Model.Edition</dd>
+            <dt>Release</dt>
+            <dd>@Model.Release</dd>
+            <dt>Version</dt>
+            <dd>@Model.Version</dd>
+
+            <dt>Jobs</dt>
+            <dd>
+                <a href="#">@Model.Jobs</a>
+            </dd>
+
+            <dt>Uptime</dt>
+            <dd>@Model.Uptime</dd>
+        </dl>
+
+        <a href="#">Top Queries</a>
+        <a href="#">Currently Active</a>
+        <a href="#">Active Connections</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h2>Performance</h2>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h2>Stats</h2>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h2>Memory and Storage</h2>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h2>Cache</h2>
+    </div>
+
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h2>Waits</h2>
+    </div>
+
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h2>Databases</h2>
+
+        <table>
+            <thead>
+            <tr>
+            <th>Name</th>
+            <th>Recovery Model</th>
+            <th>Status</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            @foreach (var database in Model.Databases)
+            {
+                <tr>
+                    <td>
+                        <a asp-action="Database" asp-route-serverId="@Model.Id" asp-route-databaseName="@database.Name">@database.Name</a>
+                    </td>
+                    <td>
+                        @database.RecoveryModel
+                    </td>
+                    <td>
+                        @database.Status
+                    </td>
+                </tr>
+            }
+            >
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -26,14 +26,15 @@ public class SqlServerInstanceService : ISqlServerService
         instance.ConnectionString = connectionStringBuilder.ConnectionString;
 
 
-        await _repository.Add(instance);
+        var id = await _repository.Add(instance);
 
-        await UpdateDatabases(instance.Name);
+
+        await UpdateDatabases(id);
     }
 
-    public async Task UpdateDatabases(string name)
+    public async Task UpdateDatabases(int id)
     {
-        var instance = await _repository.GetByName(name);
+        var instance = await _repository.GetById(id);
 
         var server = new SqlServer(instance.ConnectionString);
         var databases = await server.GetDatabases();
@@ -41,9 +42,9 @@ public class SqlServerInstanceService : ISqlServerService
     }
 
 
-    public async Task<bool> CanConnectToInstance(string name)
+    public async Task<bool> CanConnectToInstance(int id )
     {
-        var instance = await _repository.GetByName(name);
+        var instance = await _repository.GetById(id);
 
         var server = new SqlServer(instance.ConnectionString);
 

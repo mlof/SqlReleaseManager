@@ -49,11 +49,11 @@ public class DatabaseInstance
     public string DatabaseName { get; set; }
 
     public int SqlServerInstanceId { get; set; }
-
-
+    
     public int DeploymentConfigurationId { get; set; }
     public DeploymentConfiguration? DeploymentConfiguration { get; set; }
 
+    public DatabasePackage? DatabasePackage { get; set; }
 
     public SqlServerInstance SqlServerInstance { get; set; }
 
@@ -86,6 +86,19 @@ public class Deployment
 
     public DatabaseInstance DatabaseInstance { get; set; }
 
+
+}
+
+public class DatabasePackage
+{
+    public int Id { get; set; }
+
+    public string Name { get; set; }
+
+    public string FileName { get; set; }
+
+
+    
 
 }
 

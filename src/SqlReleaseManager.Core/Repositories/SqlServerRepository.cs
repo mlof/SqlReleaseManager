@@ -20,7 +20,7 @@ public class SqlServerRepository : ISqlServerRepository
 
   
 
-    public Task Add(CreateOrUpdateSqlServerInstance instance)
+    public async Task<int> Add(CreateOrUpdateSqlServerInstance instance)
     {
         var sqlServerInstance = new SqlServerInstance
         {
@@ -31,7 +31,11 @@ public class SqlServerRepository : ISqlServerRepository
 
         _dbContext.SqlServerInstances.Add(sqlServerInstance);
 
-        return _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync();
+
+        return sqlServerInstance.Id;
+
+
     }
 
     public async Task UpdateDatabases(int instanceId, IEnumerable<DatabaseDto> databases)
@@ -61,9 +65,9 @@ public class SqlServerRepository : ISqlServerRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<SqlServerInstance> GetByName(string name)
+    public async Task<SqlServerInstance> GetById(int id )
     {
-        var sqlServerInstance = await _dbContext.SqlServerInstances.SingleAsync(x => x.Name == name);
+        var sqlServerInstance = await _dbContext.SqlServerInstances.SingleAsync(x => x.Id == id);
 
         return sqlServerInstance;
     }

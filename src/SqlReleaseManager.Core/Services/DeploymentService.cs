@@ -18,9 +18,10 @@ public class DeploymentService : IDeploymentService
         _dacpacRepository = dacpacRepository;
     }
 
-    public async Task GetDeploymentReport(string serverName, string databaseName, string dacpacName)
+    public async Task GetDeploymentReport(int id, string databaseName, string dacpacName)
     {
-        var server = await _sqlServerRepository.GetByName(serverName);
+
+        var server = await _sqlServerRepository.GetById(id);
 
 
         var deploymentConfiguration = new DeploymentConfiguration();
@@ -97,16 +98,6 @@ public class DeploymentService : IDeploymentService
         };
         return options;
     }
-}
 
-public record DeploymentReport
-{
-    IEnumerable<DeploymentDifferences> Differences { get; init; }
-}
-
-public record DeploymentDifferences
-{
-    public string Name { get; set; }
-    public string? Source { get; set; }
-    public string? Target { get; set; }
+ 
 }

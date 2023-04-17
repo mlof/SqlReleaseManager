@@ -1,6 +1,8 @@
-﻿namespace SqlReleaseManager.Core.Commands;
+﻿using MediatR;
 
-public record CreateOrUpdateSqlServerInstance
+namespace SqlReleaseManager.Core.Commands;
+
+public record CreateOrUpdateSqlServerInstance : IRequest
 {
     public string Name { get; set; }
 

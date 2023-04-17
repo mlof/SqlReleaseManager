@@ -1,0 +1,18 @@
+﻿@using SqlReleaseManager.Core.Persistence
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@inject ApplicationDbContext DbContext
+
+@{
+    var instances = DbContext.SqlServerInstances.ToList();
+}
+
+
+@foreach (var instance in instances)
+{
+    <div>
+        <a asp-action="Detail" asp-route-id="@instance.Id">@instance.Name</a>
+    </div>
+}

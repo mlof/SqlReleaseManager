@@ -6,9 +6,9 @@ namespace SqlReleaseManager.Core.Abstractions;
 
 public interface ISqlServerRepository
 {
-    Task Add(CreateOrUpdateSqlServerInstance instance);
+    Task<int> Add(CreateOrUpdateSqlServerInstance instance);
     Task UpdateDatabases(int instanceId, IEnumerable<DatabaseDto> databases);
-    Task<SqlServerInstance> GetByName(string name);
+    Task<SqlServerInstance> GetById(int id);
     Task Delete(int id);
     Task Update(int id, CreateOrUpdateSqlServerInstance instance);
 }

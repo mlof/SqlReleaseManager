@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SqlReleaseManager.Web.Models;
 using System.Diagnostics;
+using SqlReleaseManager.Core.Models;
+using SqlReleaseManager.Core.Services;
 
 namespace SqlReleaseManager.Web.Controllers
 {

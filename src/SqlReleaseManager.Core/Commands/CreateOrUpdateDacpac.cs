@@ -1,6 +1,8 @@
-﻿namespace SqlReleaseManager.Core.Commands;
+﻿using MediatR;
 
-public record CreateOrUpdateDacpac
+namespace SqlReleaseManager.Core.Commands;
+
+public record CreateOrUpdateDacpac : IRequest
 {
     public CreateOrUpdateDacpac(string name, Stream stream)
     {

@@ -6,12 +6,20 @@ services:
     build:
       context: .
       dockerfile: src/SqlReleaseManager.Web/Dockerfile
+    environment:
+      - ConnectionStrings__ApplicationDb=Server=sqlserver;Database=SqlReleaseManager;User Id=sa;Password=Password123;Trust Server Certificate=True;
+      - ConnectionStrings__IdentityDb=Server=sqlserver;Database=SqlReleaseManager;User Id=sa;Password=Password123;Trust Server Certificate=True;
+      - Database__RunMigrationsOnStartup=true
   sqlserver: 
-    image: microsoft/mssql-server-linux:2022-latest
+    image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
       SA_PASSWORD: "Password123"
       ACCEPT_EULA: "Y"
     ports:
-      - "1433:1433"
+      - "1435:1433"
     volumes:
       - sqlserver:/var/opt/mssql
+volumes:
+  sqlserver:
+
+

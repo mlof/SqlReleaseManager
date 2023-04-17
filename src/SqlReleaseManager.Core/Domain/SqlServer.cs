@@ -1,7 +1,13 @@
-﻿using Dapper;
+﻿using System.Data;
+using Dapper;
 using Microsoft.Data.SqlClient;
+using Microsoft.SqlServer.Dac;
+using Microsoft.SqlServer.Dac.Model;
+using Microsoft.SqlServer.TransactSql.ScriptDom;
 using SqlReleaseManager.Core.Abstractions;
 using SqlReleaseManager.Core.Models;
+using SqlReleaseManager.Core.SchemaComparison;
+using ForeignKeyConstraint = System.Data.ForeignKeyConstraint;
 
 namespace SqlReleaseManager.Core.Domain;
 
@@ -9,16 +15,27 @@ public class SqlServer : ISqlServer
 {
     private readonly SqlConnection _dbConnection;
     private readonly SqlConnectionStringBuilder _builder;
+    private readonly string _connectionString;
 
     public string Name => _builder.DataSource;
+    public string Version { get; set; }
+    public string Edition { get; set; }
+
 
     public SqlServer(string connectionString)
     {
         this._builder =
             new SqlConnectionStringBuilder(connectionString);
 
+        if (_builder.InitialCatalog != "master")
+        {
+            throw new ArgumentException("Connection string must be to the master database");
+        }
 
-        this._dbConnection = new SqlConnection(connectionString);
+        this._connectionString = _builder.ToString();
+
+
+        this._dbConnection = new SqlConnection(_connectionString);
     }
 
     public async Task<bool> CanConnect()
@@ -47,7 +64,27 @@ public class SqlServer : ISqlServer
                     FROM sys.databases
                     ORDER BY name";
 
+
         return _dbConnection.QueryAsync<DatabaseDto>(sql);
+    }
+
+    public Schema GetSchema(string databaseName)
+    {
+        var connectionString = GetConnectionStringForDatabase(databaseName);
+        var builder = new SchemaBuilder()
+            .ForTSqlModel(TSqlModel.LoadFromDatabase(connectionString));
+
+
+        return builder.Build();
+    }
+
+    private string GetConnectionStringForDatabase(string databaseName)
+    {
+        var builder = new SqlConnectionStringBuilder(_connectionString)
+        {
+            InitialCatalog = databaseName
+        };
+        return builder.ToString();
     }
 
 
